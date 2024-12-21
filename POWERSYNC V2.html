@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nitro Energy Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+        /* Login Screen Animations */
+        #loginScreen {
+            background-color: #1f1f1f;
+            transition: transform 0.7s ease-in-out, opacity 0.7s ease-in-out;
+        }
+        #loginScreen.slide-out {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+
+        /* Dashboard Animations */
+        #dashboardContainer {
+            opacity: 0;
+            transform: translateX(100%);
+            transition: transform 0.7s ease-in-out, opacity 0.7s ease-in-out;
+        }
+        #dashboardContainer.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Section Transitions */
+        #home, #users {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+        }
+        #home.active, #users.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .sidebar {
+            background-color: #1f1f1f;
+            border-right: 1px solid #333;
+            transform: translateX(-100%);
+            transition: transform 0.7s ease-in-out;
+        }
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .active-nav {
+            background-color: #ff4500;
+            color: white;
+        }
+        .card {
+            background-color: #1f1f1f;
+            border: 1px solid #333;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .card.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <!-- Login Screen -->
+    <div id="loginScreen" class="fixed inset-0 z-50 flex items-center justify-center">
+        <div class="w-full max-w-md p-8 space-y-8 bg-gray-900 rounded-xl shadow-lg">
+            <div class="text-center">
+                <h1 class="text-3xl font-bold text-orange-500 transform transition-transform hover:scale-105">PowerSync</h1>
+                <p class="text-gray-400 mt-2">Energy Consumption Dashboard</p>
+            </div>
+            <form id="loginForm" class="space-y-6">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-300">Username</label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        required 
+                        class="mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-orange-500"
+                    >
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required 
+                        class="mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:ring-2 focus:ring-orange-500"
+                    >
+                </div>
+                <div id="loginError" class="text-red-500 text-sm hidden">
+                    Invalid username or password
+                </div>
+                <button 
+                    type="submit" 
+                    class="w-full py-2 px-4 bg-orange-500 hover:bg-orange-600 rounded-md text-white font-semibold transition duration-300 transform hover:scale-105"
+                >
+                    Log In
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Dashboard (Hidden by default) -->
+    <div id="dashboardContainer" class="hidden">
+        <div class="flex">
+            <!-- Sidebar -->
+            <div class="sidebar w-64 h-screen p-5">
+                <div class="mb-10">
+                    <h1 class="text-2xl font-bold text-orange-500">PowerSync</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li class="mb-4">
+                            <a href="#home" class="active-nav block p-3 rounded hover:bg-gray-700 transition duration-300">
+                                Home
+                            </a>
+                        </li>
+                        <li class="mb-4">
+                            <a href="#users" class="block p-3 rounded hover:bg-gray-700 transition duration-300">
+                                Users
+                            </a>
+                        </li>
+                        <li class="mb-4">
+                            <a href="#" id="logoutBtn" class="block p-3 rounded hover:bg-gray-700 transition duration-300">
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-grow p-8">
+                <!-- Home Section -->
+                <div id="home" class="active-section">
+                    <h2 class="text-3xl font-bold mb-6 text-orange-500">Weekly Energy Consumption</h2>
+                    
+                    <div class="grid grid-cols-3 gap-6">
+                        <!-- Energy Consumption Cards -->
+                        <div class="card active p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-4">Total Consumption</h3>
+                            <p class="text-3xl font-bold text-orange-500">1,245 kWh</p>
+                            <div class="mt-4 text-sm text-gray-400">Last week: 1,180 kWh</div>
+                        </div>
+
+                        <div class="card active p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-4">Peak Hours</h3>
+                            <p class="text-3xl font-bold text-orange-500">2-4 PM</p>
+                            <div class="mt-4 text-sm text-gray-400">Average consumption: 380 kWh</div>
+                        </div>
+
+                        <div class="card active p-6 rounded-lg">
+                            <h3 class="text-xl font-semibold mb-4">Energy Efficiency</h3>
+                            <p class="text-3xl font-bold text-green-500">85%</p>
+                            <div class="mt-4 text-sm text-gray-400">Improved from last week</div>
+                        </div>
+                    </div>
+
+                    <!-- Placeholder for Chart -->
+                    <div class="mt-8 card active p-6 rounded-lg">
+                        <h3 class="text-xl font-semibold mb-4">Weekly Consumption Graph</h3>
+                        <div class="h-64 flex items-center justify-center text-gray-500">
+                            Chart Placeholder
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Section -->
+                <div id="users" class="hidden">
+                    <h2 class="text-3xl font-bold mb-6 text-orange-500">User Management</h2>
+                    <table class="w-full card rounded-lg">
+                        <thead>
+                            <tr class="bg-gray-800">
+                                <th class="p-4 text-left">Name</th>
+                                <th class="p-4 text-left">Department</th>
+                                <th class="p-4 text-left">Access Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-700">
+                                <td class="p-4"></td>
+                                <td class="p-4"></td>
+                                <td class="p-4"></td>
+                            </tr>
+                            <tr class="border-b border-gray-700">
+                                <td class="p-4"></td>
+                                <td class="p-4"></td>
+                                <td class="p-4"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Predefined user credentials
+        const VALID_USERS = [
+            { username: 'admin', password: 'admin123' },
+            { username: 'user', password: 'user123' }
+        ];
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginError = document.getElementById('loginError');
+            const loginScreen = document.getElementById('loginScreen');
+            const dashboardContainer = document.getElementById('dashboardContainer');
+            const sidebar = document.querySelector('.sidebar');
+            
+            // Check credentials
+            const validUser = VALID_USERS.find(
+                user => user.username === username && user.password === password
+            );
+            
+            if (validUser) {
+                // Animate login screen out
+                loginScreen.classList.add('slide-out');
+                
+                // Show dashboard with animation
+                setTimeout(() => {
+                    loginScreen.style.display = 'none';
+                    dashboardContainer.classList.remove('hidden');
+                    
+                    // Trigger animations
+                    setTimeout(() => {
+                        dashboardContainer.classList.add('active');
+                        sidebar.classList.add('active');
+                    }, 50);
+                }, 700);
+                
+                // Reset error message
+                loginError.classList.add('hidden');
+            } else {
+                // Show error message
+                loginError.classList.remove('hidden');
+            }
+        });
+
+        // Navigation script with section animations
+        document.querySelectorAll('.sidebar a:not(#logoutBtn)').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Remove active styles from all links
+                document.querySelectorAll('.sidebar a').forEach(l => l.classList.remove('active-nav'));
+                this.classList.add('active-nav');
+
+                // Hide all sections with animation
+                document.querySelectorAll('#home, #users').forEach(section => {
+                    section.classList.remove('active');
+                    section.classList.add('hidden');
+                });
+
+                // Show selected section with animation
+                const targetSection = document.querySelector(this.getAttribute('href'));
+                targetSection.classList.remove('hidden');
+                
+                // Trigger reflow to enable transition
+                void targetSection.offsetWidth;
+                
+                targetSection.classList.add('active');
+
+                // Animate cards
+                targetSection.querySelectorAll('.card').forEach((card, index) => {
+                    setTimeout(() => {
+                        card.classList.add('active');
+                    }, index * 100);
+                });
+            });
+        });
+
+        // Logout functionality
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            const dashboardContainer = document.getElementById('dashboardContainer');
+            const loginScreen = document.getElementById('loginScreen');
+            const sidebar = document.querySelector('.sidebar');
+
+            // Animate dashboard out
+            dashboardContainer.classList.remove('active');
+            sidebar.classList.remove('active');
+
+            // Reset sections
+            document.querySelectorAll('#home, #users').forEach(section => {
+                section.classList.remove('active');
+                section.classList.add('hidden');
+            });
+
+            // Show login screen
+            setTimeout(() => {
+                dashboardContainer.classList.add('hidden');
+                loginScreen.style.display = 'flex';
+                loginScreen.classList.remove('slide-out');
+            }, 700);
+
+            // Clear input fields
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+        });
+    </script>
+</body>
+</html>

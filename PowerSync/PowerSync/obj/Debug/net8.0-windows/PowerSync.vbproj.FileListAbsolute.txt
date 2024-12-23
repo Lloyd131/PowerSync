@@ -16,3 +16,6 @@ C:\Documents\Thesis 1\Prototype App\PowerSync\PowerSync\obj\Debug\net8.0-windows
 C:\Documents\Thesis 1\Prototype App\PowerSync\PowerSync\obj\Debug\net8.0-windows\PowerSync.genruntimeconfig.cache
 C:\Documents\Thesis 1\Prototype App\PowerSync\PowerSync\obj\Debug\net8.0-windows\ref\PowerSync.dll
 C:\Documents\Thesis 1\Prototype App\PowerSync\PowerSync\obj\Debug\net8.0-windows\PowerSync.Form3.resources
+C:\Documents\Thesis 1\Prototype App\PowerSync\PowerSync\obj\Debug\net8.0-windows\PowerSync.Form4.resources
+C:\Documents\Thesis 1\Prototype App\PowerSync\PowerSync\obj\Debug\net8.0-windows\PowerSync.Resources.resources
+C:\Documents\Thesis 1\Prototype App\PowerSync\PowerSync\bin\Debug\net8.0-windows\PowerSync.dll.config

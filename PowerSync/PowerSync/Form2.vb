@@ -1,19 +1,34 @@
 ﻿Public Class Form2
+
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-        Me.Hide()
-        Form3.Show()
+        GroupBox2.Visible = True
+        GroupBox3.Visible = False
     End Sub
 
     Private Sub GroupBox1_Enter(sender As Object, e As EventArgs) Handles GroupBox1.Enter
         For Each ctlf As Control In Me.Controls
             If TypeOf ctlf Is GroupBox Then
-                ctlf.Location = New Point((Me.Width \ 2) - (ctlf.Width \ 2), (Me.Height \ 2) - (ctlf.Height \ 2))
+                ' Set a small margin from the left and top edges (e.g., 10 pixels)
+                ctlf.Location = New Point(10, 10)
             End If
         Next
     End Sub
 
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button2.Click
+        GroupBox3.Visible = True
+        GroupBox2.Visible = False
+    End Sub
+
+    Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         Me.Hide()
-        Form4.Show()
+        Form1.Show()
+    End Sub
+
+    Private Sub GroupBox2_Enter(sender As Object, e As EventArgs) Handles GroupBox2.Enter
+
+    End Sub
+
+    Private Sub Button3_Click(sender As Object, e As EventArgs) Handles Button3.Click
+
     End Sub
 End Class

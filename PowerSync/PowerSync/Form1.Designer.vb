@@ -83,10 +83,11 @@ Partial Class Form1
         ' 
         ' Button1
         ' 
-        Button1.BackColor = Color.Transparent
+        Button1.BackColor = Color.FromArgb(CByte(0), CByte(0), CByte(64))
+        Button1.FlatStyle = FlatStyle.Flat
         Button1.Font = New Font("BankGothic Md BT", 24F, FontStyle.Regular, GraphicsUnit.Point, CByte(0))
-        Button1.ForeColor = Color.FromArgb(CByte(0), CByte(0), CByte(64))
-        Button1.Location = New Point(82, 416)
+        Button1.ForeColor = Color.White
+        Button1.Location = New Point(374, 429)
         Button1.Margin = New Padding(3, 2, 3, 2)
         Button1.Name = "Button1"
         Button1.Size = New Size(210, 71)
@@ -98,13 +99,14 @@ Partial Class Form1
         ' 
         GroupBox1.AccessibleRole = AccessibleRole.None
         GroupBox1.BackColor = Color.FromArgb(CByte(0), CByte(0), CByte(64))
+        GroupBox1.BackgroundImageLayout = ImageLayout.None
         GroupBox1.Controls.Add(Button1)
         GroupBox1.Controls.Add(TextBox2)
         GroupBox1.Controls.Add(TextBox1)
         GroupBox1.Controls.Add(Label3)
         GroupBox1.Controls.Add(Label2)
         GroupBox1.Controls.Add(Label1)
-        GroupBox1.FlatStyle = FlatStyle.Popup
+        GroupBox1.FlatStyle = FlatStyle.Flat
         GroupBox1.Location = New Point(274, 136)
         GroupBox1.Name = "GroupBox1"
         GroupBox1.Size = New Size(955, 593)

@@ -1,0 +1,141 @@
+With Transition:
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Runtime.InteropServices;
+
+namespace PowerSync
+{
+    public partial class Form1 : Form
+    {
+        private FormLoader loader;
+
+        [DllImport("Gd32.dll", EntryPoint = "CreateRoundRectRgn")]
+        private static extern IntPtr CreateRoundRectRgn(int nLeftRect, int nTopRect, int nRightRect, int nBottomRect, int nWidthEllipse, int nHeightEllipse);
+
+        private class FormLoader
+        {
+            private Form currentForm;
+            private Form nextForm;
+            private Panel container;
+            private System.Windows.Forms.Timer fadeTimer;
+            private double opacity = 1;
+            private bool isFadingOut = true;
+
+            public FormLoader(Panel container)
+            {
+                this.container = container;
+                fadeTimer = new System.Windows.Forms.Timer();
+                fadeTimer.Interval = 15;
+                fadeTimer.Tick += FadeTimer_Tick;
+            }
+
+            public void LoadForm(Form newForm)
+            {
+                if (currentForm != null)
+                {
+                    nextForm = newForm;
+                    opacity = 1;
+                    isFadingOut = true;
+                    fadeTimer.Start();
+                }
+                else
+                {
+                    ShowNewForm(newForm);
+                }
+            }
+
+            private void ShowNewForm(Form newForm)
+            {
+                container.Controls.Clear();
+                currentForm = newForm;
+                currentForm.Dock = DockStyle.Fill;
+                currentForm.TopLevel = false;
+                currentForm.TopMost = true;
+                currentForm.FormBorderStyle = FormBorderStyle.None;
+                currentForm.Opacity = 0;
+                container.Controls.Add(currentForm);
+                currentForm.Show();
+
+                opacity = 0;
+                isFadingOut = false;
+                fadeTimer.Start();
+            }
+
+            private void FadeTimer_Tick(object sender, EventArgs e)
+            {
+                if (isFadingOut)
+                {
+                    opacity -= 0.05;
+                    currentForm.Opacity = opacity;
+
+                    if (opacity <= 0)
+                    {
+                        ShowNewForm(nextForm);
+                    }
+                }
+                else
+                {
+                    opacity += 0.05;
+                    currentForm.Opacity = opacity;
+
+                    if (opacity >= 1)
+                    {
+                        fadeTimer.Stop();
+                    }
+                }
+            }
+        }
+
+        public Form1()
+        {
+            InitializeComponent();
+            loader = new FormLoader(PnlFormLoader);
+            btnDashboard.BackColor = Color.FromArgb(46, 51, 73);
+            Title.Text = "Dashboard";
+            loader.LoadForm(new frmDashboard());
+        }
+
+        private void label2_Click(object sender, EventArgs e) { }
+        private void Form1_Load(object sender, EventArgs e) { }
+
+        private void btnDashboard_Click(object sender, EventArgs e)
+        {
+            btnDashboard.BackColor = Color.FromArgb(46, 51, 73);
+            Title.Text = "Dashboard";
+            loader.LoadForm(new frmDashboard());
+        }
+
+        private void btnControl_Click(object sender, EventArgs e)
+        {
+            btnControl.BackColor = Color.FromArgb(46, 51, 73);
+            Title.Text = "Power Control";
+            loader.LoadForm(new frmControl());
+        }
+
+        private void btnStats_Click(object sender, EventArgs e)
+        {
+            btnStats.BackColor = Color.FromArgb(46, 51, 73);
+            Title.Text = "Statistics";
+            loader.LoadForm(new frmStat());
+        }
+
+        private void btnDashboard_Leave(object sender, EventArgs e)
+        {
+            btnDashboard.BackColor = Color.FromArgb(24, 30, 54);
+        }
+
+        private void btnControl_Leave(object sender, EventArgs e)
+        {
+            btnControl.BackColor = Color.FromArgb(24, 30, 54);
+        }
+
+        private void btnStats_Leave(object sender, EventArgs e)
+        {
+            btnStats.BackColor = Color.FromArgb(24, 30, 54);
+        }
+    }
+}
